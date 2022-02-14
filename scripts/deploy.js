@@ -6,6 +6,7 @@ async function main(){
   const MyContract = await ethers.getContractFactory("MyContract", owner);
   const myContract = await MyContract.deploy();
   await myContract.deployed();
+  console.log(myContract.address);
 }
 
 main().then(()=>process.exit(0)).catch((er)=>{console.log(er);process.exit(1)});
