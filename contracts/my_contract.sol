@@ -3,38 +3,46 @@ pragma solidity ^0.8.0;
 
 contract MyContract{
 
-address owner;
+   address public owner;
 
-constructor(address _owner) {
-owner = _owner;
-}
+   address[] internal contributors;
 
-address[] internal contributors;
+   mapping (address => uint) internal contributorToDonation;
 
-mapping (address => uint) internal contributorToDonation;
-
-function benefit() payable external{
-   require(msg.value > 0);
-   if(contributorToDonation[msg.sender] != 0){
-   contributors.push(msg.sender);
+   constructor() {
+      owner = msg.sender;
    }
-   contributorToDonation[msg.sender] += msg.value;
-}
 
-function sendABenefits(address payable _to, uint _value) external {
-   require(msg.sender == owner);
-   require(_value > 0);
-   require(address(this).balance >= _value);
-   _to.transfer(_value);
-}
+   modifier requireOwner() {
+      require(msg.sender == owner, "You are not owner!");
+      _;
+   }
 
-function getContributors() view external returns(address[] memory) {
-   return contributors;
-}
+   function benefit() payable external{
+      require(msg.value > 0 ether);
+      if(contributorToDonation[msg.sender] != 0){
+         contributors.push(msg.sender);
+      }
+      contributorToDonation[msg.sender] += msg.value;
+   }
 
-function getDonationsByContributor(address _contributor) external view returns(uint){
-   require(contributorToDonation[_contributor] != 0, "We have no donations sent by this account!");
-   return contributorToDonation[_contributor];
-}
+   function sendABenefits(address payable _to, uint _value) external requireOwner {
+      require(_value > 0, "Please send a value > 0");
+      require(address(this).balance >= _value);
+      _to.transfer(_value);
+   }
+
+  function sendAllBenefits(address payable _to) external requireOwner {
+     _to.transfer(address(this).balance);
+  }
+
+   function getContributors() view external returns(address[] memory) {
+      return contributors;
+   }
+
+   function getDonationsByContributor(address _contributor) external view returns(uint){
+      require(contributorToDonation[_contributor] != 0, "We have no donations sent by this account!");
+      return contributorToDonation[_contributor];
+   }
 
 }
