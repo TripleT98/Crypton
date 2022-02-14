@@ -41,16 +41,16 @@ describe("Testing MyContract", async ()=>{
      expect(ethers.utils.formatEther(await myContract.getDonationsByContributor(address3.address))).to.equal(donation3);
    })
 
-   it("Checking sending a benefits function", async ()=>{
+   it("Checking benefits sending function", async ()=>{
      await modifire();
-     let donation2 = "2.0", donation3 = "3.0";
+     let donation2 = "2", donation3 = "3";
+     let summ = Number(donation2) + Number(donation3);
      await myContract.connect(address2).benefit({value:ethers.utils.parseEther(donation2)});
      await myContract.connect(address3).benefit({value:ethers.utils.parseEther(donation3)});
      let before = ethers.utils.formatEther(await address1.getBalance());
      await myContract.connect(owner).sendAllBenefits(address1.address);
      let after = ethers.utils.formatEther(await address1.getBalance());
-     console.log(before, after);
-     //expect(Number(before) + Number(donation2) + Number(donation3)).to.equal(after);
+     expect(Number(after) - Number(before)).to.equal(summ);
    })
 
 });
