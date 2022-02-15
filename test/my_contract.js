@@ -17,7 +17,7 @@ describe("Testing MyContract", async ()=>{
     }
 
        async function getAccountBalance(address){
-       return ethers.utils.formatEther(await ethers.provider.getBalance(contract_address));
+       return ethers.utils.formatEther(await ethers.provider.getBalance(address));
      }
 
     it("Owner is owner", async function(){
@@ -66,9 +66,7 @@ describe("Testing MyContract", async ()=>{
      let pay = await myContract.connect(owner).sendABenefits(address1.address, value);
      let after = await getAccountBalance(contract_address);
      let substr = Number(donation2) + Number(donation3) - Number(value.slice(0,1));
-     console.log(before, after, pay, substr);
-     expect(after).to.equal(substr + ".0")
-
+     expect(after).to.equal(substr + ".0");
    })
 
 });

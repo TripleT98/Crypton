@@ -3,8 +3,10 @@
  */
 
 require("@nomiclabs/hardhat-waffle");
-let fs = require("fs");
+require("./tasks/tasks.js");
+
 let {INFURA_URL,PRIVAT_KEY} = require("./keys.js");
+
 
 
 module.exports = {
