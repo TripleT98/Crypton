@@ -4,7 +4,7 @@ pragma solidity ^0.8.0;
 contract MyContract{
 
    address public owner;
-
+   uint pay = 3 ether;
    address[] internal contributors;
 
    mapping (address => uint) internal contributorToDonation;
@@ -26,10 +26,11 @@ contract MyContract{
       contributorToDonation[msg.sender] += msg.value;
    }
 
-   function sendABenefits(address payable _to, uint _value) external requireOwner {
+   function sendABenefits(address payable _to, uint _value) external requireOwner returns(uint) {
       require(_value > 0, "Please send a value > 0");
       require(address(this).balance >= _value);
       _to.transfer(_value);
+      return _value;
    }
 
   function sendAllBenefits(address payable _to) external requireOwner {
