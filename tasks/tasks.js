@@ -12,8 +12,16 @@ return ethers.utils.formatEther(await ethers.provider.getBalance(address));
 }
 
 task("getOwner", "get owner of myContract").setAction(async ()=>{
-  console.log(myContract.methods.owner());
+  let a = await myContract.methods.owner();
+  console.log(a._parent._address);
+})
 
+task("getContributors", "get Contributors of myContract").setAction(async()=>{
+  console.log(await myContract.methods.getContributors())
+})
+
+task("benefit", "send benefits to myContract").addParam("address", "your addres").addParam("value", "value of wei").setAction(async(taskArgs)=>{
+  await myContract.methods.sendABenefits().send({from:taskArgs.address, value:web3js.utils.toEther("value", "wei")});
 })
 
 task("balance", "Prints an account's balance",async function (taskArguments, hre, runSuper) {
