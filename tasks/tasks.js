@@ -11,6 +11,11 @@ async function getAccountBalance(address){
 return ethers.utils.formatEther(await ethers.provider.getBalance(address));
 }
 
+task("getOwner", "get owner of myContract").setAction(async ()=>{
+  console.log(myContract.methods.owner());
+
+})
+
 task("balance", "Prints an account's balance",async function (taskArguments, hre, runSuper) {
     console.log("Hello, World!");
   })
