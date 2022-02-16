@@ -38,8 +38,6 @@ contract MyContract{
   }
 
    function getContributors() view external returns(address[] memory) {
-      /*uint length = contributors.length;
-      address[] memory conts = address[](length);*/
       return contributors;
    }
 
