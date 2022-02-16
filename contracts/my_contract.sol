@@ -20,7 +20,7 @@ contract MyContract{
 
    function benefit() payable external{
       require(msg.value > 0 ether);
-      if(contributorToDonation[msg.sender] != 0){
+      if(contributorToDonation[msg.sender] == 0){
          contributors.push(msg.sender);
       }
       contributorToDonation[msg.sender] += msg.value;
@@ -38,6 +38,8 @@ contract MyContract{
   }
 
    function getContributors() view external returns(address[] memory) {
+      /*uint length = contributors.length;
+      address[] memory conts = address[](length);*/
       return contributors;
    }
 

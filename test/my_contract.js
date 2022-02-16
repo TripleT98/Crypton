@@ -69,4 +69,14 @@ describe("Testing MyContract", async ()=>{
      expect(after).to.equal(substr + ".0");
    })
 
+   it("Get all contributos", async ()=>{
+     await modifier();
+     let donation1 = "1.0", donation2 = "2.0", donation3 = "3.0";
+     await myContract.connect(address1).benefit({value:ethers.utils.parseEther(donation1)});
+     await myContract.connect(address2).benefit({value:ethers.utils.parseEther(donation2)});
+     await myContract.connect(address3).benefit({value:ethers.utils.parseEther(donation3)});
+     let contributors = await myContract.getContributors();
+     expect(contributors).to.deep.equal([address1.address,address2.address,address3.address])
+   })
+
 });
