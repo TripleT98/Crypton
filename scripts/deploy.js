@@ -8,7 +8,8 @@ async function main(){
   const myContract = await MyContract.deploy();
   await myContract.deployed();
   settings.contract_address = myContract.address;
-  console.log(myContract.address);
+  console.log("Contract address: ", myContract.address);
+  console.log("Owner address: ", owner.address);
 }
 
 main().then(()=>process.exit(0)).catch((er)=>{console.log(er);process.exit(1)});
