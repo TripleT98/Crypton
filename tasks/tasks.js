@@ -1,4 +1,11 @@
 require("@nomiclabs/hardhat-web3");
+let {INFURA_API_KEY, RINKEBY_CONTRACT_ADDRESS} = require?.("./../keys.js");
+let Web3 = require("web3");
+let myContractArtifact = require("./../artifacts/contracts/my_contract.sol/MyContract.json");
+let contract_address = "0x5FbDB2315678afecb367f032d93F642f64180aa3";
+let currentProvider = new Web3.providers.HttpProvider(`https://ropsten.infura.io/v3/${INFURA_API_KEY}`)
+let web3js = new Web3(currentProvider);
+let myContract = new web3js.eth.Contract(myContractArtifact["abi"], RINKEBY_CONTRACT_ADDRESS);
 
 async function getAccountBalance(address){
 return ethers.utils.formatEther(await ethers.provider.getBalance(address));
@@ -28,7 +35,9 @@ task("send", "send some ether to MyContract").addParam("address1", "The account'
   console.log("MyContract's balance after transaction: ", after, " ethers");
 });
 
-task("get_contributors", "get contributors");
+task("get_contributors", "get contributors").setAction(async ()=>{
+  console.log("contributors)))");
+})
 
   module.exports = {
 

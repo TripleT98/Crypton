@@ -1,4 +1,5 @@
 const hre = require("hardhat");
+let settings = require("./sc_address");
 const ethers = hre.ethers;
 
 async function main(){
@@ -6,6 +7,7 @@ async function main(){
   const MyContract = await ethers.getContractFactory("MyContract", owner);
   const myContract = await MyContract.deploy();
   await myContract.deployed();
+  settings.contract_address = myContract.address;
   console.log(myContract.address);
 }
 

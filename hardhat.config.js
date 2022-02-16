@@ -5,7 +5,7 @@
 require("@nomiclabs/hardhat-waffle");
 require("./tasks/tasks.js");
 
-let {INFURA_URL,PRIVAT_KEY} = require("./keys.js");
+let {INFURA_URL,PRIVAT_KEY} = require?.("./keys.js");
 
 
 
