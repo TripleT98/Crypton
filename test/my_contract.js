@@ -79,4 +79,18 @@ describe("Testing MyContract", async ()=>{
      expect(contributors).to.deep.equal([address1.address,address2.address,address3.address])
    })
 
+ it("Should drop error message if owner tries to send more ether than smart contract has", async ()=>{
+   await modifier();
+   let donation1 = "1.0", donation2 = "2.0", value = "4000000000000000000", err_mess = "Not enough ethers to send";
+   await myContract.connect(address1).benefit({value:ethers.utils.parseEther(donation1)});
+   await myContract.connect(address2).benefit({value:ethers.utils.parseEther(donation2)});
+   await expect(myContract.connect(owner).sendABenefits(address3.address, value)).to.be.revertedWith(err_mess);
+ })
+
+it("Should drop error message if somebody except owner tryes to send some ethers from contract", async ()=>{
+  await modifier();
+  let err_mess = "You are not owner!";
+  await expect(myContract.connect(address1).sendABenefits(address3.address, "1")).to.be.revertedWith(err_mess);
+})
+
 });

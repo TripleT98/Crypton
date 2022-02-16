@@ -28,6 +28,8 @@ task("send", "send some ether to MyContract").addParam("address1", "The account'
   console.log("MyContract's balance after transaction: ", after, " ethers");
 });
 
+task("get_contributors", "get contributors");
+
   module.exports = {
 
   };

@@ -28,7 +28,7 @@ contract MyContract{
 
    function sendABenefits(address payable _to, uint _value) external requireOwner returns(uint) {
       require(_value > 0, "Please send a value > 0");
-      require(address(this).balance >= _value);
+      require(address(this).balance >= _value, "Not enough ethers to send");
       _to.transfer(_value);
       return _value;
    }
