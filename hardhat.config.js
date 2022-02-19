@@ -4,10 +4,7 @@
 
 require("@nomiclabs/hardhat-waffle");
 require("./tasks/tasks.js");
-
-let {INFURA_URL,PRIVAT_KEY} = require?.("./keys.js");
-
-
+require("dotenv").config();
 
 module.exports = {
   solidity: "0.8.0",
@@ -19,8 +16,8 @@ module.exports = {
     },
   networks:{
      rinkeby:{
-       url:INFURA_URL,
-       accounts:[`0x${PRIVAT_KEY}`]
+       url:process.env.INFURA_URL,
+       accounts:[`0x${process.env.PRIVAT_KEY}`]
      }
   }
 };
