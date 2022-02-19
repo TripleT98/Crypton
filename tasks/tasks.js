@@ -31,9 +31,10 @@ task("getContributors", "get Contributors of myContract").setAction(async()=>{
 })
 
 
-task("benefit", "send benefits to myContract").addParam("address", "your addres").addParam("value", "value of wei").setAction(async(taskArgs)=>{
+task("benefit", "send benefits to myContract").addParam("value", "value of wei").setAction(async(taskArgs)=>{
   try{
-    await myContract.methods.benefit().send({from:taskArgs.address, value:taskArgs.value});
+    let ben = await ethers.getSigner();
+    await myContract.methods.benefit().send({from:ben.address, value:taskArgs.value});
     console.log(`${taskArgs} has been sended to myContract`)
 }catch(e){
   console.log(e.message)
