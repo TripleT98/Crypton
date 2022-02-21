@@ -1,7 +1,6 @@
 require("@nomiclabs/hardhat-web3");
 require("dotenv").config();
 let {INFURA_API_KEY, RINKEBY_CONTRACT_ADDRESS} = process.env;
-console.log(INFURA_API_KEY, RINKEBY_CONTRACT_ADDRESS);
 let Web3 = require("web3");
 let myContractArtifact = require("./../artifacts/contracts/my_contract.sol/MyContract.json");
 let contract_address = "0x7082C653E20B8e4C84bD323a671aAf2EFDCE3846";
@@ -9,10 +8,6 @@ let myPublicKey = "0xBc5D326a071AF5729e868F59040218174c3d12c3";
 let currentProvider = new Web3.providers.HttpProvider(`https://ropsten.infura.io/v3/${INFURA_API_KEY}`);
 let web3js = new Web3(currentProvider);
 let myContract = new web3js.eth.Contract(myContractArtifact["abi"], RINKEBY_CONTRACT_ADDRESS);
-
-async function getAccountBalance(address){
-return ethers.utils.formatEther(await ethers.provider.getBalance(address));
-}
 
 task("getOwner", "get owner of myContract").setAction(async ()=>{
   try{
