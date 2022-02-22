@@ -1,6 +1,9 @@
 const { expect } = require("chai");
 const {ethers} = require("hardhat");
 
+async function getContractBalance(address){
+       return ethers.utils.formatEther(await ethers.provider.getBalance(address));
+     }
 
 describe("Testing MyContract", async ()=>{
 
@@ -16,11 +19,9 @@ describe("Testing MyContract", async ()=>{
       contract_address = myContract.address;
     }
 
-       async function getAccountBalance(address){
-       return ethers.utils.formatEther(await ethers.provider.getBalance(address));
-     }
 
-    it("Owner is owner", async function(){
+
+it("Owner is owner", async function(){
       await modifier();
       expect(await myContract.owner()).to.equal(owner.address);
     })
@@ -28,13 +29,13 @@ describe("Testing MyContract", async ()=>{
    it("Checking transaction sending", async ()=>{
      await modifier();
      let donation = "1";
-     let before = await getAccountBalance(contract_address);
+     let before = await getContractBalance(contract_address);
      await myContract.benefit({value:ethers.utils.parseEther(donation)});
-     let after = await getAccountBalance(contract_address);
+     let after = await getContractBalance(contract_address);
      expect(Number(before) + Number(donation)).to.equal(Number(after));
    })
 
-   it("Check contributors donations", async ()=>{
+   it("Check contributor's donations", async ()=>{
      await modifier();
      let donation1 = "1.0", donation2 = "2.0", donation3 = "3.0";
      await myContract.connect(address1).benefit({value:ethers.utils.parseEther(donation1)});
@@ -59,12 +60,12 @@ describe("Testing MyContract", async ()=>{
 
    it("Owner could send any value of ether to any address", async ()=>{
      await modifier();
-     let before = await getAccountBalance(contract_address);
+     let before = await getContractBalance(contract_address);
      let donation2 = "2", donation3 = "3", value = "3000000000000000000";
      await myContract.connect(address2).benefit({value:ethers.utils.parseEther(donation2)});
      await myContract.connect(address3).benefit({value:ethers.utils.parseEther(donation3)});
      let pay = await myContract.connect(owner).sendABenefits(address1.address, value);
-     let after = await getAccountBalance(contract_address);
+     let after = await getContractBalance(contract_address);
      let substr = Number(donation2) + Number(donation3) - Number(value.slice(0,1));
      expect(after).to.equal(substr + ".0");
    })
@@ -93,4 +94,42 @@ it("Should drop error message if somebody except owner tryes to send some ethers
   await expect(myContract.connect(address1).sendABenefits(address3.address, "1")).to.be.revertedWith(err_mess);
 })
 
+it("Should drop error message if owner tries to send 0 ether", async ()=>{
+  await modifier();
+  let err_mess = "Please send a value > 0";
+  await expect(myContract.connect(owner).sendABenefits(address1.address, "0")).to.be.revertedWith(err_mess);
+})
+
+it("U cant benefit 0 or less ether", async ()=>{
+  await modifier();
+  let err_mess = "Please send a value > 0";
+  await expect(myContract.connect(address1).benefit({value: ethers.utils.parseEther("0")})).to.be.revertedWith(err_mess);
+})
+
 });
+
+
+describe("Some test for solidity-coverage to cover 100% of branches", async ()=>{
+
+  let MyContract, myContract, owner, address1, address2, address3, contract_address;
+
+  async function modifier(){
+    [owner, address1, address2, address3] = await ethers.getSigners();
+    MyContract = await ethers.getContractFactory("MyContract");
+    myContract = await MyContract.connect(owner).deploy();
+    await myContract.deployed();
+    contract_address = myContract.address;
+  }
+
+  async function getContractBalance(address){
+         return ethers.utils.formatEther(await ethers.provider.getBalance(address));
+       }
+
+  it("Testing 'benefit' function to cover 100% of it's branches", async ()=>{
+    await modifier();
+    let donation1 = "1.0"
+    await myContract.connect(address1).benefit({value:ethers.utils.parseEther(donation1)});
+    await myContract.connect(address1).benefit({value:ethers.utils.parseEther(donation1)});
+    expect(Number(await getContractBalance(contract_address))).to.equal(donation1*2)
+  })
+})

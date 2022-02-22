@@ -19,7 +19,7 @@ contract MyContract{
    }
 
    function benefit() payable external{
-      require(msg.value > 0 ether);
+      require(msg.value > 0 ether, "Please send a value > 0");
       if(contributorToDonation[msg.sender] == 0){
          contributors.push(msg.sender);
       }
@@ -42,7 +42,6 @@ contract MyContract{
    }
 
    function getDonationsByContributor(address _contributor) external view returns(uint){
-      require(contributorToDonation[_contributor] != 0, "We have no donations sent by this account!");
       return contributorToDonation[_contributor];
    }
 
