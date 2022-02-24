@@ -18,7 +18,7 @@ module.exports = {
   networks:{
      rinkeby:{
        url:process.env.INFURA_URL,
-       accounts:[`0x${process.env.PRIVAT_KEY}`]
+       accounts:[`0x${process.env.PRIVATE_KEY}`]
      }
   },
   plugins: ["solidity-coverage"]

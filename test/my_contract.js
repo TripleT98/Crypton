@@ -7,8 +7,6 @@ async function getContractBalance(address){
 
 describe("Testing MyContract", async ()=>{
 
-
-
     let MyContract, myContract, owner, address1, address2, address3, contract_address;
 
     async function modifier(){
@@ -18,8 +16,6 @@ describe("Testing MyContract", async ()=>{
       await myContract.deployed();
       contract_address = myContract.address;
     }
-
-
 
 it("Owner is owner", async function(){
       await modifier();
