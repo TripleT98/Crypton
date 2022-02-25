@@ -4,7 +4,6 @@ pragma solidity ^0.8.0;
 contract MyContract{
 
    address public owner;
-   uint pay = 3 ether;
    address[] internal contributors;
 
    mapping (address => uint) internal contributorToDonation;
