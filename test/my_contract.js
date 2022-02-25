@@ -102,30 +102,16 @@ it("U cant benefit 0 or less ether", async ()=>{
   await expect(myContract.connect(address1).benefit({value: ethers.utils.parseEther("0")})).to.be.revertedWith(err_mess);
 })
 
-});
-
-
-describe("Some test for solidity-coverage to cover 100% of branches", async ()=>{
-
-  let MyContract, myContract, owner, address1, address2, address3, contract_address;
-
-  async function modifier(){
-    [owner, address1, address2, address3] = await ethers.getSigners();
-    MyContract = await ethers.getContractFactory("MyContract");
-    myContract = await MyContract.connect(owner).deploy();
-    await myContract.deployed();
-    contract_address = myContract.address;
-  }
-
-  async function getContractBalance(address){
-         return ethers.utils.formatEther(await ethers.provider.getBalance(address));
-       }
-
-  it("Testing 'benefit' function to cover 100% of it's branches", async ()=>{
-    await modifier();
-    let donation1 = "1.0"
-    await myContract.connect(address1).benefit({value:ethers.utils.parseEther(donation1)});
-    await myContract.connect(address1).benefit({value:ethers.utils.parseEther(donation1)});
-    expect(Number(await getContractBalance(contract_address))).to.equal(donation1*2)
-  })
+it("One address can be added to the list only one time", async ()=>{
+  await modifier();
+  let donation1 = "1.0"
+  let contributors = [];
+  await myContract.connect(address1).benefit({value:ethers.utils.parseEther(donation1)});
+  contributors.push(address1.address);
+  await myContract.connect(address1).benefit({value:ethers.utils.parseEther(donation1)});
+  let contracts_contributors = await myContract.getContributors();
+  expect(contributors).to.deep.equal(contracts_contributors);
+  expect(Number(await getContractBalance(contract_address))).to.equal(donation1*2)
 })
+
+});
